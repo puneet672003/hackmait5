@@ -1,0 +1,39 @@
+# Vs code files
+*/.vscode
+
+# Python virtual environment
+server/pyvenv.cfg
+server/Include/
+server/Lib/
+server/Scripts/
+
+# Node.js modules
+client/node_modules/
+
+# Tauri built assets
+client/tauri/target/
+
+# React built assets
+client/build/
+
+# Environment-specific files
+.env
+
+# Local development settings
+*.sqlite3
+*.db
+
+# Logs and other generated files
+*.log
+*.pot
+*.pyc
+__pycache__/
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# Thumbnails
+._*
