@@ -67,6 +67,8 @@ async def insert_credentials(username: str, password: str):
     if (user_exists is None): 
         document = {"username": username, "password": password}
         result = await _insert(document)
+
+        return result
     else: 
         raise UserConflict(username)
         
