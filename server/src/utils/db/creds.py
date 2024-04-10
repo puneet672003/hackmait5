@@ -44,20 +44,30 @@ client = AsyncIOMotorClient("mongodb://localhost:27017")
 db = client["EHR_records"]
 creds_collection = db["credentials"]
 
-async def get_credentials(username: str):
-    
+async def _get(username: str): 
     document = await creds_collection.find_one({"username": username})
-    if document is None:
-        raise UserNotFound
     return document
 
-async def add_credentials(username: str, password: str):
-    user = await get_credentials(username)
-    if user is not None:
+async def _insert(document: dict): 
+    result = await creds_collection.insert_one(document)
+    return result
+
+async def get_credentials(username: str):
+
+    document = await _get(username)
+    if document is None:
+        raise UserNotFound(username)
+    
+    return document
+
+async def insert_credentials(username: str, password: str):
+
+    user_exists = await _get(username)
+
+    if (user_exists is None): 
         document = {"username": username, "password": password}
-        result = await creds_collection.insert_one(document)
-        return result
-    else:
+        result = await _insert(document)
+    else: 
         raise UserConflict(username)
         
 
