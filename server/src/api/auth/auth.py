@@ -1,14 +1,34 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
+from typing import Annotated
 
 from utils.db import Creds, UserConflict, UserNotFound
-from .utils import hash_password, check_password 
+from utils.auth import hash_password, check_password
+from utils.auth import create_access_token, create_refresh_token, authorize_token
+
+app = APIRouter()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"/api/auth/login")
+
+class UserData(BaseModel): 
+    username: str
 
 class UserCredentials(BaseModel): 
     username: str
     password: str
+    
+async def authenticate_user(token: Annotated[str, Depends(oauth2_scheme)]): 
+    payload_data = await authorize_token(token)
 
-app = APIRouter()
+    if not payload_data["authorized"]: 
+        raise HTTPException(status_code=401, detail="Unauthorized: Invalid token")
+
+    else: 
+        return payload_data["payload"]["sub"]
+    
+@app.get("/users/me")
+async def users_me(user_data: Annotated[UserData, Depends(authenticate_user)]): 
+    return user_data
 
 @app.post("/register")
 async def register_user(user_creds: UserCredentials): 
@@ -23,7 +43,7 @@ async def register_user(user_creds: UserCredentials):
     return {"Success"}
 
 @app.post("/login")
-async def login_user(user_creds: UserCredentials): 
+async def login_user(user_creds: Annotated[OAuth2PasswordRequestForm, Depends()]): 
     creds_manager = Creds.get_instance()
 
     try: 
@@ -35,4 +55,7 @@ async def login_user(user_creds: UserCredentials):
     if not authorized: 
         raise HTTPException(status_code=403, detail="Unauthorized: Invalid username and password")
 
-    return {"Success"}
+    refresh_token = await create_refresh_token({"sub": {"username": user_creds.username}})
+    access_token = await create_access_token({"sub": {"username": user_creds.username}})
+
+    return {"refresh_token": refresh_token, "access_token": access_token}

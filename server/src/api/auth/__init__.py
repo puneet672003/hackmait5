@@ -1,1 +1,1 @@
-from .auth import app as authRouter
+from .auth import app as authRouter, UserData, authenticate_user

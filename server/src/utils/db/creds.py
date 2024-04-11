@@ -1,4 +1,3 @@
-from motor.motor_asyncio import AsyncIOMotorClient
 from .db import DbError, CollectionManager
 
 class UserConflict(DbError):
@@ -10,7 +9,6 @@ class UserNotFound(DbError):
     def __init__(self, username) -> None:
         self.message = f"User: {username} not found!"
         super().__init__(self.message)
-        
         
 class Creds(CollectionManager): 
     
