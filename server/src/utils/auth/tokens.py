@@ -5,8 +5,7 @@ from datetime import datetime, timedelta, timezone
 
 SECRET_KEY = "your_secret_key"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
-REFRESH_TOKEN_EXPIRE_DAYS = 30
+ACCESS_TOKEN_EXPIRE_DAYS = 7
 
 def create_token(data: dict, delta: timedelta): 
     to_encode = data.copy()
@@ -32,15 +31,9 @@ def verify_token(token: str):
     except PyJWTError: 
         return {"authorized": False, "error": "Invalid Token"}
 
-async def create_refresh_token(data: dict): 
-    loop = asyncio.get_event_loop()
-    result = await loop.run_in_executor(None, create_token, data, timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS))
-
-    return result
-
 async def create_access_token(data: dict): 
     loop = asyncio.get_event_loop()
-    result = await loop.run_in_executor(None, create_token, data, timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    result = await loop.run_in_executor(None, create_token, data, timedelta(days=ACCESS_TOKEN_EXPIRE_DAYS))
 
     return result
 

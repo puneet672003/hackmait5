@@ -5,7 +5,7 @@ from typing import Annotated
 
 from utils.db import Creds, UserConflict, UserNotFound
 from utils.auth import hash_password, check_password
-from utils.auth import create_access_token, create_refresh_token, authorize_token
+from utils.auth import create_access_token, authorize_token
 
 app = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"/api/auth/login")
@@ -26,8 +26,8 @@ async def authenticate_user(token: Annotated[str, Depends(oauth2_scheme)]):
     else: 
         return payload_data["payload"]["sub"]
     
-@app.get("/users/me")
-async def users_me(user_data: Annotated[UserData, Depends(authenticate_user)]): 
+@app.get("/me")
+async def me(user_data: Annotated[UserData, Depends(authenticate_user)]): 
     return user_data
 
 @app.post("/register")
@@ -53,9 +53,7 @@ async def login_user(user_creds: Annotated[OAuth2PasswordRequestForm, Depends()]
 
     authorized = await check_password(user_creds.password, result["password"])
     if not authorized: 
-        raise HTTPException(status_code=403, detail="Unauthorized: Invalid username and password")
+        raise HTTPException(status_code=401, detail="Unauthorized: Invalid username and password")
 
-    refresh_token = await create_refresh_token({"sub": {"username": user_creds.username}})
     access_token = await create_access_token({"sub": {"username": user_creds.username}})
-
-    return {"refresh_token": refresh_token, "access_token": access_token}
+    return {"access_token": access_token}
