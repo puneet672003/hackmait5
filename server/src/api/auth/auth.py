@@ -5,7 +5,7 @@ from typing import Annotated
 
 from utils.db import Creds, UserConflict, UserNotFound
 from utils.auth import hash_password, check_password
-from utils.auth import create_access_token, authorize_token
+from utils.auth import create_refresh_token, create_access_token, authorize_token
 
 app = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"/api/auth/login")
@@ -18,7 +18,7 @@ class UserCredentials(BaseModel):
     password: str
     
 async def authenticate_user(token: Annotated[str, Depends(oauth2_scheme)]): 
-    payload_data = await authorize_token(token)
+    payload_data = await authorize_token(token, "access")
 
     if not payload_data["authorized"]: 
         raise HTTPException(status_code=401, detail="Unauthorized: Invalid token")
@@ -55,5 +55,19 @@ async def login_user(user_creds: Annotated[OAuth2PasswordRequestForm, Depends()]
     if not authorized: 
         raise HTTPException(status_code=401, detail="Unauthorized: Invalid username and password")
 
-    access_token = await create_access_token({"sub": {"username": user_creds.username}})
-    return {"access_token": access_token}
+    refresh_token = await create_refresh_token({"username": user_creds.username})
+    access_token = await create_access_token(refresh_token)
+
+    return {"refresh_token": refresh_token, "access_token": access_token}
+
+@app.post("/refresh")
+async def refresh_token(refresh_token: Annotated[str, Depends(oauth2_scheme)]): 
+    payload_data = await authorize_token(refresh_token, "refresh")
+
+    if not payload_data["authorized"]: 
+        raise HTTPException(status_code=401, detail="Unauthorized: Invalid token")
+    else: 
+        new_refresh_token = await create_refresh_token(payload_data["payload"]["sub"])
+        access_token = await create_access_token(new_refresh_token)
+
+        return {"refresh_token": new_refresh_token, "access_token": access_token}
