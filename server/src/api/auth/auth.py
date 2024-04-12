@@ -43,7 +43,7 @@ async def register_user(user_creds: UserCredentials):
     return {"Success"}
 
 @app.post("/login")
-async def login_user(user_creds: Annotated[OAuth2PasswordRequestForm, Depends()]): 
+async def login_user(user_creds: UserCredentials): 
     creds_manager = Creds.get_instance()
 
     try: 
