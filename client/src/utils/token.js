@@ -8,7 +8,7 @@ class AuthenticationError extends Error {
 }
 
 const baseAxios = axios.create({
-	baseURL: "http://localhost:3000",
+	baseURL: "http://192.168.0.106:3000",
 });
 
 const getToken = async (username, password) => {

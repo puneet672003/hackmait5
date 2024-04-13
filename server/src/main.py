@@ -14,15 +14,23 @@ db = DB("mongodb://localhost:27017", "EHR_records")
 Creds(db.get_client())
 
 # middlewares
-origins = [
-    "http://http://localhost:8081/",  # Your frontend URL
-]
+# origins = [
+#     "http://http://localhost:8081/",  # Your frontend URL
+# ]
+# app.add_middleware(
+#     CORSMiddleware, 
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["GET", "POST", "PUT", "DELETE"],
+#     allow_headers=["*"]
+# )
+
 app.add_middleware(
-    CORSMiddleware, 
-    allow_origins=origins,
+    CORSMiddleware,
+    allow_origins=["*"],  # Change to ["http://localhost"] if you only want to allow localhost
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE"],
-    allow_headers=["*"]
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # routers

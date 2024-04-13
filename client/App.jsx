@@ -1,22 +1,37 @@
 import { SafeAreaView, View, StyleSheet } from "react-native";
 
-import Login from "./src/app/Login";
+import {
+	DimensionProvider,
+	useDimension,
+} from "./src/contexts/DimensionContext";
 
-export default function App() {
+import Login from "./src/app/Login";
+import Home from "./src/app/Home";
+
+export function MainContainer() {
+	const { dimensions } = useDimension();
 	return (
-		<SafeAreaView style={styles.root}>
-			<View style={styles.container}>
-				<Login />
+		<SafeAreaView
+			style={{ width: dimensions.width, height: dimensions.height }}
+		>
+			<View style={styles.root}>
+				{/* <Login /> */}
+				<Home />
 			</View>
 		</SafeAreaView>
 	);
 }
 
+export default function App() {
+	return (
+		<DimensionProvider>
+			<MainContainer />
+		</DimensionProvider>
+	);
+}
+
 styles = StyleSheet.create({
 	root: {
-		flex: 1,
-	},
-	container: {
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",

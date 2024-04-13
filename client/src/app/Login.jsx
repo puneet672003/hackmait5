@@ -5,13 +5,12 @@ import {
 	TextInput,
 	TouchableOpacity,
 	StyleSheet,
-	Dimensions,
 } from "react-native";
+
+import { useDimension } from "../contexts/DimensionContext";
 import { getToken } from "../utils/token";
 
-const { height, width } = Dimensions.get("window");
-
-function Input({ value, hadleOnChange, placeHolder, show }) {
+function Input({ value, hadleOnChange, placeHolder, show, windowWidth }) {
 	const [focused, setFocused] = useState(false);
 
 	const handleFocus = () => {
@@ -30,7 +29,11 @@ function Input({ value, hadleOnChange, placeHolder, show }) {
 				onFocus={handleFocus}
 				onBlur={handleBlur}
 				secureTextEntry={!show}
-				style={[styles.textInput, focused && styles.textInputFocused]}
+				style={[
+					styles.textInput,
+					focused && styles.textInputFocused,
+					{ width: windowWidth },
+				]}
 				selectionColor={"rgb(4,175,112)"}
 			/>
 		</View>
@@ -40,26 +43,28 @@ function Input({ value, hadleOnChange, placeHolder, show }) {
 export default function Login() {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const { dimensions } = useDimension();
 
 	const onPressLogin = async () => {
-		console.log("submitting: \t");
-		console.log("username: ", username);
+		console.log("submitting: ");
+		console.log("\tusername: ", username);
 		console.log("\tpassword: ", password);
-		// try {
-		// 	const tokens = await getToken(username, password);
-		// 	console.log("access token: ", tokens.access_token);
-		// 	console.log("refresh token: ", tokens.refresh_token);
-		// } catch (err) {
-		// 	console.error(err);
-		// }
+
+		const tokens = await getToken(username, password);
+		console.log(tokens);
 
 		setUsername("");
 		setPassword("");
 	};
 
 	return (
-		<View style={styles.container}>
-			<Text style={styles.title}>
+		<View
+			style={[
+				styles.loginContainer,
+				{ maxHeight: dimensions.height * 0.6 },
+			]}
+		>
+			<Text style={[styles.title, { width: dimensions.width * 0.8 }]}>
 				Let's make your{"\n"}{" "}
 				<Text style={styles.highlightedText}>account!</Text>
 			</Text>
@@ -68,14 +73,19 @@ export default function Login() {
 				placeHolder={"Username"}
 				hadleOnChange={setUsername}
 				show={true}
+				windowWidth={dimensions.width * 0.8}
 			/>
 			<Input
 				value={password}
 				placeHolder={"Password"}
 				hadleOnChange={setPassword}
 				show={false}
+				windowWidth={dimensions.width * 0.8}
 			/>
-			<TouchableOpacity onPress={onPressLogin} style={styles.button}>
+			<TouchableOpacity
+				onPress={onPressLogin}
+				style={[styles.button, { width: dimensions.width * 0.8 }]}
+			>
 				<Text style={styles.buttonText}>Next</Text>
 			</TouchableOpacity>
 			<View style={styles.signupTextContainer}>
@@ -89,17 +99,15 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
-	container: {
+	loginContainer: {
 		flex: 1,
 		padding: 20,
 		backgroundColor: "#fff",
-		maxHeight: height * 0.6,
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
 	},
 	title: {
-		width: width * 0.8,
 		fontSize: 24,
 		fontWeight: "bold",
 		textAlign: "left",
@@ -115,7 +123,6 @@ const styles = StyleSheet.create({
 		marginBottom: 5,
 	},
 	textInput: {
-		width: width * 0.8,
 		borderColor: "transparent",
 		backgroundColor: "rgb(223,250,241)",
 		borderWidth: 1,
@@ -128,7 +135,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "white",
 	},
 	button: {
-		width: width * 0.8,
 		backgroundColor: "rgb(4,175,112)",
 		padding: 15,
 		borderRadius: 5,
