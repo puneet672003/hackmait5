@@ -24,7 +24,7 @@ function BottomNavigator({ sceneStyle, tabBarStyle }) {
 			screenOptions={({ route }) => ({
 				tabBarIcon: ({ color, size, focused }) => {
 					let iconName;
-					const iconColor = focused ? "white" : "rgb(223,250,241)";
+					const iconColor = focused ? "rgb(4,175,112)" : "black";
 
 					if (focused) size = size * 1.5;
 
@@ -85,6 +85,6 @@ const styles = StyleSheet.create({
 	navigationBar: {
 		elevation: 0,
 		borderTopWidth: 0,
-		backgroundColor: "rgb(4,175,112)",
+		backgroundColor: "white",
 	},
 });
