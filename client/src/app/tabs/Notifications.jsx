@@ -3,15 +3,16 @@ import { View, StyleSheet, Text } from "react-native";
 
 export default function Notifications() {
 	return (
-		<View style={styles.feedsContainer}>
+		<View style={styles.notificationsContainer}>
 			<Text>Notifications tab</Text>
 		</View>
 	);
 }
 
-styles = StyleSheet.create({
+const styles = StyleSheet.create({
 	notificationsContainer: {
-		flex: 1,
+		flexGrow: 1,
+		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
 	},

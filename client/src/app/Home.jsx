@@ -1,7 +1,8 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, StatusBar } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 import Feeds from "./tabs/Feeds";
 import Donate from "./tabs/Donate";
@@ -14,51 +15,76 @@ import { useDimension } from "../contexts/DimensionContext";
 const Tab = createBottomTabNavigator();
 
 // Bottom navigator component
-export function BottomNavigator({ tabbarStyle }) {
+function BottomNavigator({ sceneStyle, tabBarStyle }) {
+	const { dimensions } = useDimension();
+
 	return (
-		<NavigationContainer>
-			<Tab.Navigator>
-				<Tab.Screen
-					name="Feeds"
-					component={Feeds}
-					options={{ headerShown: false }}
-				/>
-				<Tab.Screen
-					name="Donate"
-					component={Donate}
-					options={{ headerShown: false }}
-				/>
-				<Tab.Screen
-					name="Notifications"
-					component={Notifications}
-					options={{ headerShown: false }}
-				/>
-				<Tab.Screen
-					name="Profile"
-					component={Profile}
-					options={{ headerShown: false }}
-				/>
-			</Tab.Navigator>
-		</NavigationContainer>
+		<Tab.Navigator
+			sceneContainerStyle={[sceneStyle, { width: dimensions.width }]}
+			screenOptions={({ route }) => ({
+				tabBarIcon: ({ color, size, focused }) => {
+					let iconName;
+					const iconColor = focused ? "white" : "rgb(223,250,241)";
+
+					if (focused) size = size * 1.5;
+
+					if (route.name === "Feeds") iconName = "home";
+					else if (route.name === "Donate") iconName = "gratipay";
+					else if (route.name === "Notifications") iconName = "bell";
+					else if (route.name === "Profile") iconName = "user";
+
+					return (
+						<Icon name={iconName} size={size} color={iconColor} />
+					);
+				},
+				tabBarStyle: tabBarStyle,
+				tabBarLabelStyle: { display: "none" },
+			})}
+		>
+			<Tab.Screen
+				name="Feeds"
+				component={Feeds}
+				options={{ headerShown: false }}
+			/>
+			<Tab.Screen
+				name="Donate"
+				component={Donate}
+				options={{ headerShown: false }}
+			/>
+			<Tab.Screen
+				name="Notifications"
+				component={Notifications}
+				options={{ headerShown: false }}
+			/>
+			<Tab.Screen
+				name="Profile"
+				component={Profile}
+				options={{ headerShown: false }}
+			/>
+		</Tab.Navigator>
 	);
 }
 
 export default function Home() {
-	const { dimensions } = useDimension();
 	return (
-		<View style={[styles.homeContainer, { width: dimensions.width }]}>
-			<BottomNavigator tabbarStyle={styles.navigationBar} />
-		</View>
+		<NavigationContainer>
+			<BottomNavigator
+				sceneStyle={styles.sceneContainer}
+				tabBarStyle={styles.navigationBar}
+			/>
+		</NavigationContainer>
 	);
 }
 
 const styles = StyleSheet.create({
-	homeContainer: {
-		flex: 1,
+	sceneContainer: {
+		flexGrow: 1,
+		display: "flex",
+		backgroundColor: "#eee",
 	},
 	navigationBar: {
-		backgroundColor: "red",
-		padding: 10,
-		margin: 20,
+		elevation: 0,
+		borderTopWidth: 0,
+		backgroundColor: "rgb(4,175,112)",
 	},
 });

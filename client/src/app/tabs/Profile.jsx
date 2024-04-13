@@ -3,15 +3,16 @@ import { View, StyleSheet, Text } from "react-native";
 
 export default function Profile() {
 	return (
-		<View style={styles.feedsContainer}>
+		<View style={styles.profileContainer}>
 			<Text>Profile tab</Text>
 		</View>
 	);
 }
 
-styles = StyleSheet.create({
+const styles = StyleSheet.create({
 	profileContainer: {
-		flex: 1,
+		flexGrow: 1,
+		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
 	},
