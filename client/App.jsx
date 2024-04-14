@@ -1,5 +1,6 @@
 import { SafeAreaView, View, StyleSheet, Text } from "react-native";
 import { Gesture, GestureHandlerRootView } from "react-native-gesture-handler";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { DimensionProvider } from "./src/contexts/DimensionContext";
 

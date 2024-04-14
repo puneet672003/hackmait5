@@ -5,6 +5,7 @@ import {
 	TextInput,
 	TouchableOpacity,
 	StyleSheet,
+	SafeAreaView,
 } from "react-native";
 
 import { useDimension } from "../contexts/DimensionContext";
@@ -58,43 +59,49 @@ export default function Login() {
 	};
 
 	return (
-		<View
-			style={[
-				styles.loginContainer,
-				{ maxHeight: dimensions.height * 0.6 },
-			]}
+		<SafeAreaView
+			style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
 		>
-			<Text style={[styles.title, { width: dimensions.width * 0.8 }]}>
-				Let's make your{"\n"}{" "}
-				<Text style={styles.highlightedText}>account!</Text>
-			</Text>
-			<Input
-				value={username}
-				placeHolder={"Username"}
-				hadleOnChange={setUsername}
-				show={true}
-				windowWidth={dimensions.width * 0.8}
-			/>
-			<Input
-				value={password}
-				placeHolder={"Password"}
-				hadleOnChange={setPassword}
-				show={false}
-				windowWidth={dimensions.width * 0.8}
-			/>
-			<TouchableOpacity
-				onPress={onPressLogin}
-				style={[styles.button, { width: dimensions.width * 0.8 }]}
+			<View
+				style={[
+					styles.loginContainer,
+					{ maxHeight: dimensions.height * 0.6 },
+				]}
 			>
-				<Text style={styles.buttonText}>Next</Text>
-			</TouchableOpacity>
-			<View style={styles.signupTextContainer}>
-				<Text style={styles.signupText}>Already have an account?</Text>
-				<TouchableOpacity>
-					<Text style={styles.highlightedText}>Sign in</Text>
+				<Text style={[styles.title, { width: dimensions.width * 0.8 }]}>
+					Let's make your{"\n"}{" "}
+					<Text style={styles.highlightedText}>account!</Text>
+				</Text>
+				<Input
+					value={username}
+					placeHolder={"Username"}
+					hadleOnChange={setUsername}
+					show={true}
+					windowWidth={dimensions.width * 0.8}
+				/>
+				<Input
+					value={password}
+					placeHolder={"Password"}
+					hadleOnChange={setPassword}
+					show={false}
+					windowWidth={dimensions.width * 0.8}
+				/>
+				<TouchableOpacity
+					onPress={onPressLogin}
+					style={[styles.button, { width: dimensions.width * 0.8 }]}
+				>
+					<Text style={styles.buttonText}>Next</Text>
 				</TouchableOpacity>
+				<View style={styles.signupTextContainer}>
+					<Text style={styles.signupText}>
+						Already have an account?
+					</Text>
+					<TouchableOpacity>
+						<Text style={styles.highlightedText}>Sign in</Text>
+					</TouchableOpacity>
+				</View>
 			</View>
-		</View>
+		</SafeAreaView>
 	);
 }
 

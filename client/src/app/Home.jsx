@@ -1,12 +1,10 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import { Text, View, StyleSheet, StatusBar } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { StyleSheet } from "react-native";
 import IonIcon from "react-native-vector-icons/Ionicons";
 
-import Feeds from "./tabs/Feeds";
-import Donate from "./tabs/Donate";
+import Menu from "./tabs/Menu";
 import Notifications from "./tabs/Notifications";
 import Profile from "./tabs/Profile";
 
@@ -26,8 +24,9 @@ function BottomNavigator({ sceneStyle, tabBarStyle }) {
 				tabBarIcon: ({ color, size, focused }) => {
 					let iconName;
 					const iconColor = focused ? "rgb(4,175,112)" : "black";
+					const iconSize = 24;
 
-					if (route.name === "Feeds") iconName = "home-outline";
+					if (route.name === "Menu") iconName = "home-outline";
 					else if (route.name === "Donate")
 						iconName = "heart-outline";
 					else if (route.name === "Notifications")
@@ -38,15 +37,15 @@ function BottomNavigator({ sceneStyle, tabBarStyle }) {
 					return (
 						<IonIcon
 							name={iconName}
-							size={size}
+							size={iconSize}
 							color={iconColor}
 							style={[
+								{
+									paddingVertical: 10,
+								},
 								focused && {
 									borderTopWidth: 4,
-									borderColor: "rgb(4,175,112)",
-								},
-								{
-									padding: 10,
+									borderTopColor: "rgb(4,175,112)",
 								},
 							]}
 						/>
@@ -57,15 +56,11 @@ function BottomNavigator({ sceneStyle, tabBarStyle }) {
 			})}
 		>
 			<Tab.Screen
-				name="Feeds"
-				component={Feeds}
+				name="Menu"
+				component={Menu}
 				options={{ headerShown: false }}
 			/>
-			<Tab.Screen
-				name="Donate"
-				component={Donate}
-				options={{ headerShown: false }}
-			/>
+
 			<Tab.Screen
 				name="Notifications"
 				component={Notifications}
