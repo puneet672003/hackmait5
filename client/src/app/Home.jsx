@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { Text, View, StyleSheet, StatusBar } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import IonIcon from "react-native-vector-icons/Ionicons";
 
 import Feeds from "./tabs/Feeds";
 import Donate from "./tabs/Donate";
@@ -26,15 +27,29 @@ function BottomNavigator({ sceneStyle, tabBarStyle }) {
 					let iconName;
 					const iconColor = focused ? "rgb(4,175,112)" : "black";
 
-					if (focused) size = size * 1.5;
-
-					if (route.name === "Feeds") iconName = "home";
-					else if (route.name === "Donate") iconName = "gratipay";
-					else if (route.name === "Notifications") iconName = "bell";
-					else if (route.name === "Profile") iconName = "user";
+					if (route.name === "Feeds") iconName = "home-outline";
+					else if (route.name === "Donate")
+						iconName = "heart-outline";
+					else if (route.name === "Notifications")
+						iconName = "notifications-outline";
+					else if (route.name === "Profile")
+						iconName = "person-outline";
 
 					return (
-						<Icon name={iconName} size={size} color={iconColor} />
+						<IonIcon
+							name={iconName}
+							size={size}
+							color={iconColor}
+							style={[
+								focused && {
+									borderTopWidth: 4,
+									borderColor: "rgb(4,175,112)",
+								},
+								{
+									padding: 10,
+								},
+							]}
+						/>
 					);
 				},
 				tabBarStyle: tabBarStyle,
