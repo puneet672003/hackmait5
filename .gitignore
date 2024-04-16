@@ -1,5 +1,7 @@
 # Vs code files
-*/.vscode
+vscode/
+*/.vscode/
+**/.vscode/
 
 # Python virtual environment
 server/pyvenv.cfg

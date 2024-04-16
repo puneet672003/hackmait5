@@ -7,7 +7,8 @@ import {
 	TouchableOpacity,
 	ScrollView,
 } from "react-native";
-import MaterialIcon from "react-native-vector-icons/MaterialIcons";
+import { useNavigation } from "@react-navigation/native";
+
 import { useDimension } from "../../contexts/DimensionContext";
 
 function TopBarContainer() {
@@ -32,8 +33,14 @@ function TopBarContainer() {
 function CreateDonationPost() {
 	const { dimensions } = useDimension();
 
+	const navigation = useNavigation();
+	const navigateToFoodDetail = () => {
+		navigation.navigate("FoodDetail");
+	};
+
 	return (
 		<TouchableOpacity
+			onPress={navigateToFoodDetail}
 			style={[
 				styles.donationPostButton,
 				{ width: dimensions.width * 0.7 },

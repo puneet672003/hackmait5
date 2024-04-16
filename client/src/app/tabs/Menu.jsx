@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import Donators from "./Donators";
 import Requests from "./Requests";
+import FoodDetail from "./FoodDetail";
 import { useDimension } from "../../contexts/DimensionContext";
 
 const Stack = createNativeStackNavigator();
@@ -33,6 +34,11 @@ export default function MenuStack() {
 			<Stack.Screen
 				name="Requests"
 				component={Requests}
+				options={{ headerShown: false }}
+			/>
+			<Stack.Screen
+				name="FoodDetail"
+				component={FoodDetail}
 				options={{ headerShown: false }}
 			/>
 		</Stack.Navigator>
@@ -128,7 +134,7 @@ export function Menu() {
 					{ height: dimensions.height * 0.25 },
 				]}
 			>
-				<Text style={styles.welcomeSubTitle}>welcome 💚</Text>
+				<Text style={styles.welcomeSubTitle}>Welcome 💚</Text>
 				<Text style={styles.welcomeText}>Share to Care</Text>
 			</View>
 
